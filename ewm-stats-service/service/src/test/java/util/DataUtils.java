@@ -1,8 +1,8 @@
 package util;
 
-import ewm_stats_dto.dto.EndpointHitDto;
-import ewm_stats_dto.dto.Parameters;
-import ewm_stats_dto.dto.ViewStatsDto;
+import ru.practicum.dto.EndpointHitDto;
+import ru.practicum.dto.Parameters;
+import ru.practicum.dto.ViewStatsDto;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
