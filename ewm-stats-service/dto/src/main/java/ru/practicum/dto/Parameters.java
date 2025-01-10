@@ -11,9 +11,9 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(of = {"start", "end", "uris", "unique"})
 public class Parameters {
 
-    LocalDateTime start;
-    LocalDateTime end;
-    String[] uris;
-    boolean unique;
+private LocalDateTime start;
+private LocalDateTime end;
+private String[] uris;
+private boolean unique;
 
 }

@@ -11,8 +11,8 @@ import lombok.ToString;
 @ToString
 public class ViewStatsDto {
 
-    String app;
-    String uri;
-    int hits;
+private String app;
+private String uri;
+private int hits;
 
 }
