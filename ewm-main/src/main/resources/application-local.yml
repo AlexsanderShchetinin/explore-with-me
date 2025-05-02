@@ -1,0 +1,18 @@
+server.port: 8080
+
+ewm-stats-server.url: http://localhost:9090
+
+spring:
+  security:
+    oauth2:
+      resoureserver:
+        jwt:
+          issuer-uri:
+          jwk-set-uri:
+
+keycloak:
+  realm:
+  url: http://localhost:8282/
+  secret: secret
+  client:
+    id: explore-with-me-service

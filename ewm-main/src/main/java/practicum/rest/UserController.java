@@ -1,0 +1,54 @@
+package practicum.rest;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import practicum.service.UserService;
+import ru.practicum.dto.UserDto;
+
+import java.util.UUID;
+
+@RestController
+@Slf4j
+@RequestMapping(path = "/api/v1/users")
+@RequiredArgsConstructor
+public class UserController {
+
+    private final UserService userService;
+
+    @GetMapping(path = "/{id}", name = "получить пользователя")
+    public ResponseEntity<UserDto> getByUuid(@RequestParam UUID uuid){
+        //TODO AOP create comments
+        return ResponseEntity.ok().body(userService.getByUuid(uuid));
+    }
+
+    @PostMapping
+    public ResponseEntity<UserDto> create(@RequestBody UserDto userDto){
+        //TODO AOP create comments
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(userDto));
+    }
+
+    @PutMapping(path = "/{uuid}")
+    public ResponseEntity<UserDto> update(@RequestBody UserDto updatedUserDto){
+        //TODO AOP create comments
+        return ResponseEntity.ok(userService.update(updatedUserDto));
+    }
+
+    @DeleteMapping(path = "/softDelete/{uuid}")
+    public ResponseEntity<Void> softDelete(@RequestParam UUID uuid){
+        //TODO AOP create comments
+        userService.softDeleteByUuid(uuid);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @DeleteMapping(path = "/hardDelete/{uuid}")
+    public ResponseEntity<Void> hardDelete(@RequestParam UUID uuid){
+        //TODO AOP create comments
+        userService.hardDeleteByUuid(uuid);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+
+}
