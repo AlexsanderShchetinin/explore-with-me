@@ -1,5 +1,5 @@
 services:
-  stats-server:
+  stats-service:
     build: ewm-stats-service
     container_name: stats-service-container
     ports:
@@ -11,6 +11,8 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/ewm_stats_db
       - SPRING_DATASOURCE_USERNAME=stats
       - SPRING_DATASOURCE_PASSWORD=stats
+    networks:
+      - apps
 
 
   stats-db:
@@ -28,21 +30,34 @@ services:
       timeout: 5s
       interval: 5s
       retries: 10
+    networks:
+      - apps
 
 
   ewm-service:
-    build: ewm-main-service
+    build: ewm-main
     container_name: main-service-container
     ports:
       - "8080:8080"
     depends_on:
       - ewm-db
-      - stats-server
+      - stats-service
+      - keycloak-service
     environment:
-      - EWM_STATS_SERVICE_URL=http://stats-server:9090
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm-db
+      - EWM_STATS_SERVICE_URL=http://stats-service:9090
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm_main_db
       - SPRING_DATASOURCE_USERNAME=main
       - SPRING_DATASOURCE_PASSWORD=main
+      - SPRING_DATASOURCE_PROPERTIES_SCHEMA=ewm_prime
+      - SPRING_FLYWAY_ENABLED=true
+      - SPRING_FLYWAY_CREATE-SCHEMAS=true
+      - SPRING_FLYWAY_SCHEMAS=ewm_prime
+      - SPRING_FLYWAY_URL=jdbc:postgresql://ewm-db:5432/ewm_main_db
+      - SPRING_FLYWAY_USER=main
+      - SPRING_FLYWAY_PASSWORD=main
+      - SPRING_FLYWAY_LOCATIONS=classpath:db/migration
+    networks:
+      - apps
 
   ewm-db:
     container_name: main-DB-container
@@ -60,54 +75,66 @@ services:
       timeout: 5s
       interval: 5s
       retries: 10
+    networks:
+      - apps
 
 
-#  keycloak-postgres:
-#    image: postgres:${KC_POSTGRES_IMAGE_TAG:-16.1}
-#    container_name: ${POSTGRES_CONTAINER_NAME:-postgres}
-#    restart: on-failure
-#    volumes:
-#      - ./volumes/main/postgres-keycloak:/var/lib/postgresql/data/
-#    environment:
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=postgres
-#      - POSTGRES_DB=postgres
-#    healthcheck:
-#      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
-#      interval: 10s
-#      timeout: 5s
-#      retries: 3
-#      start_period: 5s
-#    ports:
-#      - ${KC_POSTGRES_PORT_MAPPING:-5435}:5432
-#    deploy:
-#      resources:
-#        limits:
-#          memory: 256M
-#
-#  keycloak:
-#    image: quay.io/keycloak/keycloak:26.1.4
-#    container_name: keycloak
-#    command:
-#      - start-dev
-#      #- start --auto-build --db postgres --hostname-strict-https false --hostname-strict false --proxy edge --http-enabled true --import-realm --spi-user-profile-legacy-user-profile-read-only-attributes *_RES_ACCESS_MODE
-#    environment:
-#      KC_DB: postgres
-#      KC_DB_URL: jdbc:postgresql://keycloak-postgres:5432/postgres
-#      KC_DB_USERNAME: postgres
-#      KC_DB_PASSWORD: postgres
+  keycloak-postgres:
+    image: postgres:${KC_POSTGRES_IMAGE_TAG:-16.1}
+    container_name: ${POSTGRES_CONTAINER_NAME:-keycloak_postgres_container}
+    restart: on-failure
+    ports:
+      - ${KC_POSTGRES_PORT_MAPPING:-5003}:5432
+    volumes:
+      - ./volumes/main/postgres-keycloak:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: keycloak_DB
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    networks:
+      - keycloak_net
+
+  keycloak-service:
+    image: quay.io/keycloak/keycloak:26.2
+    container_name: keycloak_container
+    command:
+      - start-dev
+      #- start --auto-build --db postgres --hostname-strict-https false --hostname-strict false --proxy edge --http-enabled true --import-realm --spi-user-profile-legacy-user-profile-read-only-attributes *_RES_ACCESS_MODE
+    environment:
+      KC_DB: postgres
+      KC_DB_URL_HOST: keycloak-postgres
+      KC_DB_URL_DATABASE: keycloak_DB
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KC_HOSTNAME: localhost
 #      KC_DB_SCHEMA: public
 #      KC_FEATURES: preview
-#      KEYCLOAK_ADMIN: admin
-#      KEYCLOAK_ADMIN_PASSWORD: admin
-#    ports:
-#      - 8282:8080
-#    depends_on:
-#      keycloak-postgres:
-#        condition: service_healthy
-#    healthcheck:
-#      test: ["CMD", "curl", "-f", "http://0.0.0.0:8080/realms/master"]
-#      start_period: 10s
-#      interval: 30s
-#      retries: 3
-#      timeout: 5s
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - 8282:8080
+    depends_on:
+      keycloak-postgres:
+        condition: service_healthy
+    healthcheck:
+      #test: ["CMD", "curl", "-f", "http://0.0.0.0:8282/realms/master"]
+      start_period: 10s
+      interval: 30s
+      retries: 3
+      timeout: 5s
+    networks:
+      - keycloak_net
+
+networks:
+  keycloak_net:
+  apps:

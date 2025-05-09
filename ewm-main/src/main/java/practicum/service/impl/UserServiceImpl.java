@@ -7,6 +7,7 @@ import practicum.mapper.UserMapperImpl;
 import practicum.model.User;
 import practicum.repository.UserJpaRepository;
 import practicum.service.UserService;
+import practicum.util.UserUtil;
 import ru.practicum.dto.UserDto;
 
 import java.util.List;
@@ -18,6 +19,17 @@ public class UserServiceImpl implements UserService {
 
     private final UserJpaRepository userRepository;
     private final UserMapperImpl userMapper;
+    private final UserUtil util;
+
+    @Override
+    public Long getUserCount() {
+        return userRepository.count();
+    }
+
+    @Override
+    public Integer createRandomUsers(Integer count) {
+        return userRepository.saveAll(util.getRandomUsers(count)).size();
+    }
 
     @Override
     public UserDto getByUuid(UUID uuid) {

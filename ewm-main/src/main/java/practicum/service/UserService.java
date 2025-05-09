@@ -19,4 +19,8 @@ public interface UserService {
 
     void hardDeleteByUuid(UUID uuid);
 
+    Integer createRandomUsers(Integer count);
+
+    Long getUserCount();
+
 }

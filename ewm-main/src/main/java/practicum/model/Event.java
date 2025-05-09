@@ -1,9 +1,11 @@
 package practicum.model;
 
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 
 @Getter
@@ -12,33 +14,50 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @ToString
+@Entity
+@Table(name = "events", schema = "ewm_prime")
 public class Event {
 
-    private UUID id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     /**
      * Название события
      */
     private String name;
 
+    private AtomicInteger test;
+    private AtomicReference<String> testStr;
+
     /**
      * Краткая информация
      */
+    @Column(name = "brief_description")
     private String briefDescription;
 
     /**
      * Полное описание события
      */
+    @Column(name = "full_description")
     private String fullDescription;
 
+    @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category category;
 
+    @Temporal(value = TemporalType.TIMESTAMP)
     private LocalDateTime created;
+    @Temporal(value = TemporalType.TIMESTAMP)
     private LocalDateTime modified;
 
+    @Temporal(value = TemporalType.TIMESTAMP)
     private LocalDateTime beginning;
+    @Temporal(value = TemporalType.TIMESTAMP)
     private LocalDateTime ending;
 
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
     private User creator;
 
 }

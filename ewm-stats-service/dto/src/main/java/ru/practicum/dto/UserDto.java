@@ -2,8 +2,6 @@ package ru.practicum.dto;
 
 import lombok.*;
 
-import java.util.UUID;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -12,7 +10,7 @@ import java.util.UUID;
 @ToString
 public class UserDto {
 
-    private UUID id;
+    private Long id;
 
     private String firstname;
     private String lastname;

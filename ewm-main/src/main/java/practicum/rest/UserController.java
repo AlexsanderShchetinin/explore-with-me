@@ -18,11 +18,23 @@ public class UserController {
 
     private final UserService userService;
 
+    @PostMapping(path = "/random/{count}")
+    public ResponseEntity<Integer> createRandomUsers(@PathVariable Integer count){
+        return ResponseEntity.ok(userService.createRandomUsers(count));
+    }
+
+    @GetMapping(path = "/getCount")
+    public ResponseEntity<Long> getUserCountDB(){
+        return ResponseEntity.ok().body(userService.getUserCount());
+    }
+
     @GetMapping(path = "/{id}", name = "получить пользователя")
-    public ResponseEntity<UserDto> getByUuid(@RequestParam UUID uuid){
+    public ResponseEntity<UserDto> getByUuid(@PathVariable UUID uuid){
         //TODO AOP create comments
         return ResponseEntity.ok().body(userService.getByUuid(uuid));
     }
+
+
 
     @PostMapping
     public ResponseEntity<UserDto> create(@RequestBody UserDto userDto){
@@ -37,14 +49,14 @@ public class UserController {
     }
 
     @DeleteMapping(path = "/softDelete/{uuid}")
-    public ResponseEntity<Void> softDelete(@RequestParam UUID uuid){
+    public ResponseEntity<Void> softDelete(@PathVariable UUID uuid){
         //TODO AOP create comments
         userService.softDeleteByUuid(uuid);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @DeleteMapping(path = "/hardDelete/{uuid}")
-    public ResponseEntity<Void> hardDelete(@RequestParam UUID uuid){
+    public ResponseEntity<Void> hardDelete(@PathVariable UUID uuid){
         //TODO AOP create comments
         userService.hardDeleteByUuid(uuid);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

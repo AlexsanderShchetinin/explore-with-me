@@ -1,8 +1,9 @@
 package practicum.model;
 
+import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.UUID;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -10,13 +11,24 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @ToString
+@Entity
+@Table(name = "users", schema = "ewm_prime")
 public class User {
 
-    private UUID id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String firstname;
     private String lastname;
     private String email;
+    @Temporal(value = TemporalType.TIMESTAMP)
+    private LocalDateTime updated;
+    @Temporal(value = TemporalType.TIMESTAMP)
+    private LocalDateTime created;
+
+    @Enumerated(value = EnumType.STRING)
     private UserRole role;
+
 
 }

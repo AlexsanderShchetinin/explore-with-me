@@ -1,9 +1,5 @@
 package ru.practicum.controller;
 
-import ru.practicum.dto.EndpointHitDto;
-import ru.practicum.dto.Parameters;
-import ru.practicum.dto.ViewStatsDto;
-import ru.practicum.service.StatisticService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,11 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.practicum.dto.EndpointHitDto;
+import ru.practicum.dto.Parameters;
+import ru.practicum.dto.ViewStatsDto;
+import ru.practicum.service.StatisticService;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -43,7 +42,7 @@ public class StatsController {
             @RequestParam(name = "start", defaultValue = "2022-01-01 00:00:00") String start,
             @RequestParam(name = "end", defaultValue = "2035-01-01 00:00:00") String end,
             @RequestParam(name = "uris", defaultValue = "all") String[] uris,
-            @Validated(Boolean.class) @RequestParam(name = "unique", defaultValue = "false") boolean unique,
+            @RequestParam(name = "unique", defaultValue = "false") Boolean unique,
             HttpServletRequest servletRequest
     ) {
         final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
