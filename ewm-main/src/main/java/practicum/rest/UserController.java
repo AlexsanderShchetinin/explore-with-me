@@ -6,7 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import practicum.service.UserService;
-import ru.practicum.dto.UserDto;
 
 import java.util.UUID;
 
@@ -36,26 +35,26 @@ public class UserController {
 
 
 
-    @PostMapping
+    @PostMapping(path = "/auth")
     public ResponseEntity<UserDto> create(@RequestBody UserDto userDto){
         //TODO AOP create comments
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(userDto));
     }
 
-    @PutMapping(path = "/{uuid}")
+    @PutMapping(path = "/auth/{uuid}")
     public ResponseEntity<UserDto> update(@RequestBody UserDto updatedUserDto){
         //TODO AOP create comments
         return ResponseEntity.ok(userService.update(updatedUserDto));
     }
 
-    @DeleteMapping(path = "/softDelete/{uuid}")
+    @DeleteMapping(path = "/auth/softDelete/{uuid}")
     public ResponseEntity<Void> softDelete(@PathVariable UUID uuid){
         //TODO AOP create comments
         userService.softDeleteByUuid(uuid);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @DeleteMapping(path = "/hardDelete/{uuid}")
+    @DeleteMapping(path = "/auth/hardDelete/{uuid}")
     public ResponseEntity<Void> hardDelete(@PathVariable UUID uuid){
         //TODO AOP create comments
         userService.hardDeleteByUuid(uuid);

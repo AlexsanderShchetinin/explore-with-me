@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 
 @Getter
@@ -26,9 +24,6 @@ public class Event {
      * Название события
      */
     private String name;
-
-    private AtomicInteger test;
-    private AtomicReference<String> testStr;
 
     /**
      * Краткая информация

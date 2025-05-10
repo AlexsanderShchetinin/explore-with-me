@@ -22,7 +22,7 @@ spring:
     enabled: true
     create-schemas: true
     schemas: ewm_prime
-    #url: jdbc:postgresql://localhost:5002/ewm_main_db
+    url: jdbc:postgresql://localhost:5002/ewm_main_db
     user: main
     password: main
     locations : classpath:db/migration

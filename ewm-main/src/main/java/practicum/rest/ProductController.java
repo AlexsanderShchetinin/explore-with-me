@@ -9,8 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequestMapping(path = "/api/v1/events")
 @RequiredArgsConstructor
-public class EventController {
+public class ProductController {
 
+    /*public ResponseEntity<>
+
+    HttpServletRequest request) {
+        log.info("client ip: {}", request.getRemoteAddr());
+        log.info("endpoint path: {}", request.getRequestURI());*/
 
 
 

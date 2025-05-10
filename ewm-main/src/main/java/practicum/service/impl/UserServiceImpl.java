@@ -3,13 +3,19 @@ package practicum.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import practicum.exception.NotFoundException;
+import practicum.exception.UserCreateException;
 import practicum.mapper.UserMapperImpl;
 import practicum.model.User;
+import practicum.model.UserRole;
 import practicum.repository.UserJpaRepository;
 import practicum.service.UserService;
 import practicum.util.UserUtil;
-import ru.practicum.dto.UserDto;
+import ru.practicum.dto.user.UserCreateRequestDto;
+import ru.practicum.dto.user.UserCreateResponseDto;
+import ru.practicum.dto.user.UserResponseDto;
+import ru.practicum.dto.user.UserUpdateRequestDto;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,27 +38,37 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getByUuid(UUID uuid) {
+    public UserResponseDto getByUuid(UUID uuid) {
         User user = userRepository.findById(uuid)
                 .orElseThrow(
                         () -> new NotFoundException("not found user by uuid=" + uuid)
                 );
-        return userMapper.toDto(user);
+        return userMapper.toResponseDto(user);
     }
 
     @Override
-    public List<UserDto> getByListId(List<UUID> uuids) {
+    public List<UserResponseDto> getByListId(List<UUID> uuids) {
         return List.of();
     }
 
     @Override
-    public UserDto create(UserDto userDto) {
+    public UserCreateResponseDto create(UserCreateRequestDto userDto) {
+        // Проверка роли
+        long result = Arrays.stream(UserRole.values())
+                .map(Enum::name)
+                .filter(role -> role.equalsIgnoreCase(userDto.getRole()))
+                .peek(userDto::setRole)
+                .count();
+        if(result == 0){
+            throw new UserCreateException("Некорректная роль пользователя, необходимые: " + Arrays.toString(UserRole.values()));
+        }
 
-        return null;
+        User user = userRepository.save(userMapper.toModelFromCreateRequestDto(userDto));
+        return userMapper.toCreateResponseDto(user);
     }
 
     @Override
-    public UserDto update(UserDto updatedUserDto) {
+    public UserResponseDto update(UserUpdateRequestDto updatedUserDto) {
         return null;
     }
 

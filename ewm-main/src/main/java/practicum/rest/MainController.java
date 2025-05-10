@@ -7,9 +7,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
-@RequestMapping(path = "/api/v1/events")
+@RequestMapping(path = "/api/v1/home")
 @RequiredArgsConstructor
-public class EventController {
+public class MainController {
+
 
 
 

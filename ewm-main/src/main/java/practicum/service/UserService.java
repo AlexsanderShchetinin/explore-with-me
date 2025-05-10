@@ -1,19 +1,22 @@
 package practicum.service;
 
-import ru.practicum.dto.UserDto;
+import ru.practicum.dto.user.UserCreateRequestDto;
+import ru.practicum.dto.user.UserCreateResponseDto;
+import ru.practicum.dto.user.UserResponseDto;
+import ru.practicum.dto.user.UserUpdateRequestDto;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
 
-    UserDto getByUuid(UUID uuid);
+    UserResponseDto getByUuid(UUID uuid);
 
-    List<UserDto> getByListId(List<UUID> uuids);
+    List<UserResponseDto> getByListId(List<UUID> uuids);
 
-    UserDto create(UserDto userDto);
+    UserCreateResponseDto create(UserCreateRequestDto userDto);
 
-    UserDto update(UserDto updatedUserDto);
+    UserResponseDto update(UserUpdateRequestDto updatedUserDto);
 
     void softDeleteByUuid(UUID uuid);
 
