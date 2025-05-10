@@ -12,7 +12,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=stats
       - SPRING_DATASOURCE_PASSWORD=stats
     networks:
-      - apps
+      - keycloak_net
 
 
   stats-db:
@@ -31,10 +31,10 @@ services:
       interval: 5s
       retries: 10
     networks:
-      - apps
+      - keycloak_net
 
 
-  ewm-service:
+  main-service:
     build: ewm-main
     container_name: main-service-container
     ports:
@@ -57,7 +57,7 @@ services:
       - SPRING_FLYWAY_PASSWORD=main
       - SPRING_FLYWAY_LOCATIONS=classpath:db/migration
     networks:
-      - apps
+      - keycloak_net
 
   ewm-db:
     container_name: main-DB-container
@@ -76,7 +76,7 @@ services:
       interval: 5s
       retries: 10
     networks:
-      - apps
+      - keycloak_net
 
 
   keycloak-postgres:
@@ -122,7 +122,7 @@ services:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
     ports:
-      - 8282:8080
+      - 8282:8282
     depends_on:
       keycloak-postgres:
         condition: service_healthy

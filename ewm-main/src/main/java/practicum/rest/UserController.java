@@ -6,6 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import practicum.service.UserService;
+import ru.practicum.dto.user.UserCreateRequestDto;
+import ru.practicum.dto.user.UserCreateResponseDto;
+import ru.practicum.dto.user.UserResponseDto;
+import ru.practicum.dto.user.UserUpdateRequestDto;
 
 import java.util.UUID;
 
@@ -28,7 +32,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/{id}", name = "получить пользователя")
-    public ResponseEntity<UserDto> getByUuid(@PathVariable UUID uuid){
+    public ResponseEntity<UserResponseDto> getByUuid(@PathVariable UUID uuid){
         //TODO AOP create comments
         return ResponseEntity.ok().body(userService.getByUuid(uuid));
     }
@@ -36,13 +40,13 @@ public class UserController {
 
 
     @PostMapping(path = "/auth")
-    public ResponseEntity<UserDto> create(@RequestBody UserDto userDto){
+    public ResponseEntity<UserCreateResponseDto> create(@RequestBody UserCreateRequestDto userDto){
         //TODO AOP create comments
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(userDto));
     }
 
     @PutMapping(path = "/auth/{uuid}")
-    public ResponseEntity<UserDto> update(@RequestBody UserDto updatedUserDto){
+    public ResponseEntity<UserResponseDto> update(@RequestBody UserUpdateRequestDto updatedUserDto){
         //TODO AOP create comments
         return ResponseEntity.ok(userService.update(updatedUserDto));
     }

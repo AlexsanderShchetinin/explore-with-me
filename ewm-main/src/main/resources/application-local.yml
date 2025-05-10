@@ -2,14 +2,29 @@ server.port: 8080
 
 ewm-stats-server.url: http://localhost:9090
 
+keycloak:
+  realm: ewm_main_service
+  url: http://localhost:8282/
+  secret: B6UkDzdMB634PwWgCuMVq5pCvR9tRC9D
+  client:
+    id: ewmmain
+
 spring:
   allow-bean-definition-overriding: true
-#  security:
-#    oauth2:
-#      resoureserver:
-#        jwt:
-#          issuer-uri:
-#          jwk-set-uri:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8282/realms/ewm_main_service
+      client:
+        registration:
+          keycloak:
+            provider: keycloak
+            client-id: ewmmain
+            client-secret: B6UkDzdMB634PwWgCuMVq5pCvR9tRC9D
+            client-name: ewmmain
+            authorization-grant-type: authorization_code
+            scope: openid, profile, email
 
   datasource:
     username: main
@@ -41,10 +56,3 @@ logging:
   level:
     org.flywaydb: DEBUG
 
-
-keycloak:
-  realm:
-  url: http://localhost:8282/
-  secret: secret
-  client:
-    id: explore-with-me-service
