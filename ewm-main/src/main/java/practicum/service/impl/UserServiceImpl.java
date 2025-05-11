@@ -15,9 +15,9 @@ import ru.practicum.dto.user.UserCreateResponseDto;
 import ru.practicum.dto.user.UserResponseDto;
 import ru.practicum.dto.user.UserUpdateRequestDto;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -38,16 +38,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto getByUuid(UUID uuid) {
-        User user = userRepository.findById(uuid)
+    public UserResponseDto getById(Long id) {
+        User user = userRepository.findById(id)
                 .orElseThrow(
-                        () -> new NotFoundException("not found user by uuid=" + uuid)
+                        () -> new NotFoundException("not found user by uuid=" + id)
                 );
         return userMapper.toResponseDto(user);
     }
 
     @Override
-    public List<UserResponseDto> getByListId(List<UUID> uuids) {
+    public List<UserResponseDto> getByListId(List<Long> ids) {
         return List.of();
     }
 
@@ -69,16 +69,36 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto update(UserUpdateRequestDto updatedUserDto) {
-        return null;
+        User userRep = userRepository.findById(updatedUserDto.getId())
+                .orElseThrow(
+                        () -> new NotFoundException("not found user by uuid=" + updatedUserDto.getId())
+                );
+        User user = userMapper.toModelFromUpdateRequestDto(updatedUserDto);
+        for (Field field : userRep.getClass().getDeclaredFields()) {
+            try {
+                Field userClassField = user.getClass().getDeclaredField(field.getName());
+                userClassField.setAccessible(true);
+                field.setAccessible(true);
+                if((userClassField.get(user) != null) && (!userClassField.get(user).equals(field.get(userRep)))){
+                    // TODO log updating field
+                    field.set(userRep, userClassField.get(user));
+                }
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        User updatedUser = userRepository.save(userRep);
+        return userMapper.toResponseDto(updatedUser);
     }
 
     @Override
-    public void softDeleteByUuid(UUID uuid) {
+    public void softDeleteById(Long id) {
 
     }
 
     @Override
-    public void hardDeleteByUuid(UUID uuid) {
+    public void hardDeleteById(Long id) {
 
     }
 }

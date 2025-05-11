@@ -36,4 +36,8 @@ public class UserResponseDto {
     private LocalDateTime created;
     private LocalDateTime updated;
 
+    @JsonProperty(value = "admin_confirm", defaultValue = "false")
+    @JsonFormat(shape = JsonFormat.Shape.BOOLEAN)
+    private boolean adminConfirm;
+
 }

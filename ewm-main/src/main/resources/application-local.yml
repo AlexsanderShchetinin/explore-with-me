@@ -1,11 +1,11 @@
-server.port: 8080
+server.port: 8181
 
 ewm-stats-server.url: http://localhost:9090
 
 keycloak:
   realm: ewm_main_service
   url: http://localhost:8282/
-  secret: B6UkDzdMB634PwWgCuMVq5pCvR9tRC9D
+  secret: ydzS7J1ghlDDWKyeX0NTL150RMbUaUhn
   client:
     id: ewmmain
 
@@ -21,7 +21,7 @@ spring:
           keycloak:
             provider: keycloak
             client-id: ewmmain
-            client-secret: B6UkDzdMB634PwWgCuMVq5pCvR9tRC9D
+            client-secret: ydzS7J1ghlDDWKyeX0NTL150RMbUaUhn
             client-name: ewmmain
             authorization-grant-type: authorization_code
             scope: openid, profile, email

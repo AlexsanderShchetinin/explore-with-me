@@ -5,7 +5,8 @@ CREATE TABLE ewm_prime.users (
   updated       TIMESTAMP   DEFAULT now() NOT NULL,
   firstname     VARCHAR(32),
   lastname      VARCHAR(32),
-  role          VARCHAR(32)
+  role          VARCHAR(32),
+  admin_confirm BOOLEAN     DEFAULT FALSE NOT NULL
 );
 
 CREATE TABLE ewm_prime.categories (

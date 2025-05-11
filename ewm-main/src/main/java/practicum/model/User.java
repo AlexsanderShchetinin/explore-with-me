@@ -30,5 +30,8 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRole role;
 
+    @Column(name = "admin_confirm", nullable = false)
+    private boolean adminConfirm;
+
 
 }

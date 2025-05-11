@@ -6,21 +6,20 @@ import ru.practicum.dto.user.UserResponseDto;
 import ru.practicum.dto.user.UserUpdateRequestDto;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface UserService {
 
-    UserResponseDto getByUuid(UUID uuid);
+    UserResponseDto getById(Long id);
 
-    List<UserResponseDto> getByListId(List<UUID> uuids);
+    List<UserResponseDto> getByListId(List<Long> ids);
 
     UserCreateResponseDto create(UserCreateRequestDto userDto);
 
     UserResponseDto update(UserUpdateRequestDto updatedUserDto);
 
-    void softDeleteByUuid(UUID uuid);
+    void softDeleteById(Long id);
 
-    void hardDeleteByUuid(UUID uuid);
+    void hardDeleteById(Long id);
 
     Integer createRandomUsers(Integer count);
 

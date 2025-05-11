@@ -11,8 +11,6 @@ import ru.practicum.dto.user.UserCreateResponseDto;
 import ru.practicum.dto.user.UserResponseDto;
 import ru.practicum.dto.user.UserUpdateRequestDto;
 
-import java.util.UUID;
-
 @RestController
 @Slf4j
 @RequestMapping(path = "/api/v1/users")
@@ -31,13 +29,17 @@ public class UserController {
         return ResponseEntity.ok().body(userService.getUserCount());
     }
 
-    @GetMapping(path = "/{id}", name = "получить пользователя")
-    public ResponseEntity<UserResponseDto> getByUuid(@PathVariable UUID uuid){
+    @GetMapping(path = "/{id}", name = "получить базовую информацию пользователя")
+    public ResponseEntity<UserResponseDto> getById(@PathVariable Long id){
         //TODO AOP create comments
-        return ResponseEntity.ok().body(userService.getByUuid(uuid));
+        return ResponseEntity.ok().body(userService.getById(id));
     }
 
-
+    @GetMapping(path = "/auth/{id}", name = "получить подробную информацию пользователя")
+    public ResponseEntity<UserResponseDto> authGetById(@PathVariable Long id){
+        //TODO AOP create comments
+        return ResponseEntity.ok().body(userService.getById(id));
+    }
 
     @PostMapping(path = "/auth")
     public ResponseEntity<UserCreateResponseDto> create(@RequestBody UserCreateRequestDto userDto){
@@ -45,23 +47,29 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(userDto));
     }
 
-    @PutMapping(path = "/auth/{uuid}")
+    @PutMapping(path = "/auth/{id}")
     public ResponseEntity<UserResponseDto> update(@RequestBody UserUpdateRequestDto updatedUserDto){
         //TODO AOP create comments
         return ResponseEntity.ok(userService.update(updatedUserDto));
     }
 
-    @DeleteMapping(path = "/auth/softDelete/{uuid}")
-    public ResponseEntity<Void> softDelete(@PathVariable UUID uuid){
+    @PutMapping(path = "/admin/confirm/{id}")
+    public ResponseEntity<UserResponseDto> confirm(@RequestBody UserUpdateRequestDto updatedUserDto){
         //TODO AOP create comments
-        userService.softDeleteByUuid(uuid);
+        return ResponseEntity.ok(userService.update(updatedUserDto));
+    }
+
+    @DeleteMapping(path = "/auth/softDelete/{uuid}")
+    public ResponseEntity<Void> softDelete(@PathVariable Long id){
+        //TODO AOP create comments
+        userService.softDeleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @DeleteMapping(path = "/auth/hardDelete/{uuid}")
-    public ResponseEntity<Void> hardDelete(@PathVariable UUID uuid){
+    public ResponseEntity<Void> hardDelete(@PathVariable Long id){
         //TODO AOP create comments
-        userService.hardDeleteByUuid(uuid);
+        userService.hardDeleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

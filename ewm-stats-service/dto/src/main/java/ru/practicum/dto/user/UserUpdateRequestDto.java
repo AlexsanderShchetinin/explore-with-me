@@ -19,18 +19,23 @@ import lombok.*;
 public class UserUpdateRequestDto {
 
     @JsonProperty(required = true)
+    private Long id;
+
     @NotBlank
     private String firstname;
 
-    @JsonProperty(required = true)
     @NotBlank
     private String lastname;
 
     @Email(message = "неверный формат email")
     private String email;
 
-    @JsonProperty(defaultValue = "UNAUTHORIZED_USER", required = true)
+    @JsonProperty(defaultValue = "UNAUTHORIZED_USER")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private String role;
+
+    @JsonProperty(value = "admin_confirm", defaultValue = "false")
+    @JsonFormat(shape = JsonFormat.Shape.BOOLEAN)
+    private boolean adminConfirm;
 
 }

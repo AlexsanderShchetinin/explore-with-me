@@ -14,11 +14,12 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/events/**").permitAll()
-                        .requestMatchers("/api/v1/events/auth/**").authenticated()
+                        .requestMatchers("/api/v1/events/auth/**").hasAnyAuthority("ROLE_ewmmain.user", "ROLE_ewmmain.admin")
                         .requestMatchers("/api/v1/products/**").permitAll()
-                        .requestMatchers("/api/v1/products/auth/**").authenticated()
-                        .requestMatchers("/api/v1/users/**").permitAll()
+                        .requestMatchers("/api/v1/products/auth/**").hasAnyAuthority("ROLE_ewmmain.user", "ROLE_ewmmain.admin")
                         .requestMatchers("/api/v1/users/auth/**").authenticated()
+                        .requestMatchers("/api/v1/users/**").permitAll()
+                        .requestMatchers("/api/v1/**/admin/**").hasAuthority("ROLE_ewmmain.admin")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
