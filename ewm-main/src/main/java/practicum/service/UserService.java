@@ -1,15 +1,14 @@
 package practicum.service;
 
-import ru.practicum.dto.user.UserCreateRequestDto;
-import ru.practicum.dto.user.UserCreateResponseDto;
-import ru.practicum.dto.user.UserResponseDto;
-import ru.practicum.dto.user.UserUpdateRequestDto;
+import ru.practicum.dto.user.*;
 
 import java.util.List;
 
 public interface UserService {
 
     UserResponseDto getById(Long id);
+
+    UserShortResponseDto getShortInfoById(Long id);
 
     List<UserResponseDto> getByListId(List<Long> ids);
 

@@ -10,10 +10,7 @@ import practicum.model.UserRole;
 import practicum.repository.UserJpaRepository;
 import practicum.service.UserService;
 import practicum.util.UserUtil;
-import ru.practicum.dto.user.UserCreateRequestDto;
-import ru.practicum.dto.user.UserCreateResponseDto;
-import ru.practicum.dto.user.UserResponseDto;
-import ru.practicum.dto.user.UserUpdateRequestDto;
+import ru.practicum.dto.user.*;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -39,11 +36,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto getById(Long id) {
-        User user = userRepository.findById(id)
+        return userMapper.toResponseDto(getFromDBById(id));
+    }
+
+    @Override
+    public UserShortResponseDto getShortInfoById(Long id) {
+        return userMapper.toShortResponseDto(getFromDBById(id));
+    }
+
+    private User getFromDBById(Long id){
+        return userRepository.findById(id)
                 .orElseThrow(
-                        () -> new NotFoundException("not found user by uuid=" + id)
+                        () -> new NotFoundException("not found user by id=" + id)
                 );
-        return userMapper.toResponseDto(user);
     }
 
     @Override

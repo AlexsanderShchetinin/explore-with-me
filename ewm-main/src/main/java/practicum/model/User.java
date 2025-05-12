@@ -31,7 +31,10 @@ public class User {
     private UserRole role;
 
     @Column(name = "admin_confirm", nullable = false)
-    private boolean adminConfirm;
+    private Boolean adminConfirm;
+
+    @Column(name = "flag_delete", nullable = false)
+    private Boolean flagDelete;
 
 
 }

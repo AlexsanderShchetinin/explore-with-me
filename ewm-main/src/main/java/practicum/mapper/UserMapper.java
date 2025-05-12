@@ -3,10 +3,7 @@ package practicum.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 import practicum.model.User;
-import ru.practicum.dto.user.UserCreateRequestDto;
-import ru.practicum.dto.user.UserCreateResponseDto;
-import ru.practicum.dto.user.UserResponseDto;
-import ru.practicum.dto.user.UserUpdateRequestDto;
+import ru.practicum.dto.user.*;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, unmappedSourcePolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
@@ -20,5 +17,6 @@ public interface UserMapper {
 
     UserResponseDto toResponseDto(User user);
 
+    UserShortResponseDto toShortResponseDto(User user);
 
 }
