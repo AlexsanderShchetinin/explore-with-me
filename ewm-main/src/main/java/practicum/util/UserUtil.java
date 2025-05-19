@@ -28,6 +28,8 @@ public class UserUtil {
                             .role(UserRole.UNAUTHORIZED_USER)
                             .created(LocalDateTime.now())
                             .updated(LocalDateTime.now())
+                            .flagDelete(false)
+                            .adminConfirm(false)
                             .build()
             );
         }

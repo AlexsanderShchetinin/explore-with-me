@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import practicum.config.aop.LoggingAndExecutingTime;
 import practicum.service.UserService;
 import ru.practicum.dto.user.*;
 
@@ -15,6 +16,7 @@ import ru.practicum.dto.user.*;
 @Slf4j
 @RequestMapping(path = "/api/v1/users")
 @RequiredArgsConstructor
+@LoggingAndExecutingTime
 public class UserController {
 
     private final UserService userService;
@@ -121,7 +123,7 @@ public class UserController {
      * @param id идентификатор пользователя типа Long
      * @return Void со статусом 204(NO_CONTENT) при успешном удалении пользователя из БД
      */
-    @DeleteMapping(path = "/admin/hardDelete/{uuid}")
+    @DeleteMapping(path = "/admin/hardDelete/{id}")
     public ResponseEntity<Void> hardDelete(@PathVariable Long id){
         //TODO AOP create comments
         userService.hardDeleteById(id);

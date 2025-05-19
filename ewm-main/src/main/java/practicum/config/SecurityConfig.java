@@ -14,7 +14,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/v1/users/admin/**").hasAuthority("ROLE_ewmmain.admin")
-                        .requestMatchers("/api/v1/users/auth/**").hasAnyAuthority()
+                        .requestMatchers("/api/v1/users/auth/**").hasAnyAuthority("ROLE_ewmmain.user", "ROLE_ewmmain.admin")
                         .requestMatchers("/api/v1/events/auth/**").hasAnyAuthority("ROLE_ewmmain.user", "ROLE_ewmmain.admin")
                         .requestMatchers("/api/v1/products/auth/**").hasAnyAuthority("ROLE_ewmmain.user", "ROLE_ewmmain.admin")
                         .anyRequest().permitAll()
